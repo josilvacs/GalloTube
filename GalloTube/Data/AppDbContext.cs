@@ -11,11 +11,9 @@ public class AppDbContext : IdentityDbContext
     }
 
     public DbSet<AppUser> AppUsers { get; set; }
-    public DbSet<Genre> Genres { get; set;}
-    public DbSet<Movie> Movies { get; set; }
-    public DbSet<MovieComment> MovieComments { get; set; } 
-    public DbSet<MovieGenre> MovieGenres { get; set; }
-    public DbSet<MovieRating> MovieRating { get; set; }
+    public DbSet<VideoTag> VideoTags { get; set;}
+    public DbSet<Video> Videos { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder builder) //void não tem retorno
     {
@@ -47,49 +45,23 @@ public class AppDbContext : IdentityDbContext
         });
         #endregion
 
-        #region Many To Many - MovieComment
-        builder.Entity<MovieComment>()
-            .HasOne(mc => mc.Movie)
-            .WithMany(m => m.Comments)
-            .HasForeignKey(mc => mc.MovieId);
 
-        builder.Entity<MovieComment>()
-            .HasOne(mc => mc.User)
-            .WithMany(u => u.Comments)
-            .HasForeignKey(mc => mc.UserId);
-        #endregion
-
-        #region Many To Many - MovieGenre
+        #region Many To Many - VideoVideoTag
         // Definição de Chave Primária Composta
-        builder.Entity<MovieGenre>().HasKey(
-            mg => new { mg.MovieId, mg.GenreId }
+        object value = builder.Entity<VideoTag>().HasKey(
+            mg => new { mg.VideoId, mg.VideoTagId }
         );
 
-        builder.Entity<MovieGenre>()
-            .HasOne(mg => mg.Movie)
-            .WithMany(m => m.Genres)
-            .HasForeignKey(mg => mg.MovieId);
+        builder.Entity<VideoTag>()
+            .HasOne(mg => mg.Video)
+            .WithMany(m => m.VideoTags)
+            .HasForeignKey(mg => mg.VideoId);
 
-        builder.Entity<MovieGenre>()
-            .HasOne(mg => mg.Genre)
-            .WithMany(g => g.Movies)
-            .HasForeignKey(mg => mg.GenreId);
+        builder.Entity<VideoTag>()
+            .HasOne(mg => mg.VideoTag)
+            .WithMany(g => g.Videos)
+            .HasForeignKey(mg => mg.VideoTagId);
         #endregion
 
-        #region Many To Many - MovieRating
-        builder.Entity<MovieRating>().HasKey(
-            mr => new { mr.MovieId, mr.UserId }
-        );
-
-        builder.Entity<MovieRating>()
-            .HasOne(mr => mr.Movie)
-            .WithMany(m => m.Ratings)
-            .HasForeignKey(mr => mr.MovieId);
-
-        builder.Entity<MovieRating>()
-            .HasOne(mr => mr.User)
-            .WithMany(u => u.Ratings)
-            .HasForeignKey(mr => mr.UserId);
-        #endregion
     }
 }
