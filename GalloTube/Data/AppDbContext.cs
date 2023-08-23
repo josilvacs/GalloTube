@@ -49,18 +49,18 @@ public class AppDbContext : IdentityDbContext
         #region Many To Many - VideoVideoTag
         // Definição de Chave Primária Composta
         object value = builder.Entity<VideoTag>().HasKey(
-            mg => new { mg.VideoId, mg.VideoTagId }
+            mg => new { mg.VideoId, mg.TagId }
         );
 
         builder.Entity<VideoTag>()
             .HasOne(mg => mg.Video)
-            .WithMany(m => m.VideoTags)
+            .WithMany(m => m.Tags)
             .HasForeignKey(mg => mg.VideoId);
 
         builder.Entity<VideoTag>()
-            .HasOne(mg => mg.VideoTag)
+            .HasOne(mg => mg.Tag)
             .WithMany(g => g.Videos)
-            .HasForeignKey(mg => mg.VideoTagId);
+            .HasForeignKey(mg => mg.VideoId);
         #endregion
 
     }
