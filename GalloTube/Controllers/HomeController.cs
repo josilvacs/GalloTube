@@ -19,10 +19,18 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var movies = _context.Videos.Include(m => m.Tags).ThenInclude(g => g.Tag).ToList();
-        return View(movies);
+        var videos = _context.Videos.Include(m => m.Tags).ThenInclude(g => g.Tag).ToList();
+        return View(videos);
     }
-
+    public IActionResult Video(int? id)
+    {
+        var Video = _context.Videos
+            .Where(m => m.Id == id)
+            .Include(m => m.Tags)
+            .ThenInclude(g => g.Tag)
+            .SingleOrDefault();
+        return View(Video);
+    }
     public IActionResult Privacy()
     {
         return View();

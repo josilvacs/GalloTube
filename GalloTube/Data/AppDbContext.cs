@@ -64,4 +64,7 @@ public class AppDbContext : IdentityDbContext
         #endregion
 
     }
+    
+
+    public DbSet<GalloTube.Models.Tag> Tag { get; set; }
 }
